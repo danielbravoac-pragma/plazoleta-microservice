@@ -1,17 +1,11 @@
 package com.pragma.plazoleta.infrastructure.configuration;
 
-import com.pragma.plazoleta.application.usecase.CategoryDishUseCase;
-import com.pragma.plazoleta.application.usecase.CategoryUseCase;
-import com.pragma.plazoleta.application.usecase.DishUseCase;
-import com.pragma.plazoleta.application.usecase.RestaurantUseCase;
-import com.pragma.plazoleta.domain.api.ICategoryDishServicePort;
-import com.pragma.plazoleta.domain.api.ICategoryServicePort;
-import com.pragma.plazoleta.domain.api.IDishServicePort;
-import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
-import com.pragma.plazoleta.domain.spi.ICategoryDishPersistencePort;
-import com.pragma.plazoleta.domain.spi.ICategoryPersistencePort;
-import com.pragma.plazoleta.domain.spi.IDishPersistencePort;
-import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
+import com.pragma.plazoleta.application.usecase.*;
+import com.pragma.plazoleta.domain.api.*;
+import com.pragma.plazoleta.domain.spi.*;
+import com.pragma.plazoleta.infrastructure.output.feign.adapter.UserFeignAdapter;
+import com.pragma.plazoleta.infrastructure.output.feign.client.UserClient;
+import com.pragma.plazoleta.infrastructure.output.feign.mapper.IUserResponseMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.CategoryDishJpaAdapter;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.CategoryJpaAdapter;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.DishJpaAdapter;
@@ -37,7 +31,18 @@ public class BeanConfiguration {
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
     private final ICategoryDishRepository categoryDishRepository;
+    private final UserClient userClient;
+    private final IUserResponseMapper userResponseMapper;
 
+    @Bean
+    public IUserPersistencePort userPersistencePort() {
+        return new UserFeignAdapter(userClient, userResponseMapper);
+    }
+
+    @Bean
+    public IUserServicePort userServicePort() {
+        return new UserUseCase(userPersistencePort());
+    }
 
     @Bean
     public ICategoryDishPersistencePort categoryDishPersistencePort() {
@@ -67,7 +72,7 @@ public class BeanConfiguration {
 
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(restaurantPersistencePort());
+        return new RestaurantUseCase(restaurantPersistencePort(), userServicePort());
     }
 
     @Bean
@@ -77,6 +82,6 @@ public class BeanConfiguration {
 
     @Bean
     public IDishServicePort dishServicePort() {
-        return new DishUseCase(dishPersistencePort(), categoryDishServicePort(), restaurantServicePort(),categoryServicePort());
+        return new DishUseCase(dishPersistencePort(), categoryDishServicePort(), restaurantServicePort(), categoryServicePort(), userServicePort());
     }
 }

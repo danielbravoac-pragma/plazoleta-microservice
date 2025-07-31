@@ -41,7 +41,7 @@ public class RestaurantEntity {
     @Column(nullable = false)
     private Long ownerId;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DishEntity> dishes;
 
     @CreationTimestamp

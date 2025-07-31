@@ -27,8 +27,8 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CategoryDishEntity> categories = new HashSet<>();
+    @OneToMany(mappedBy = "category", cascade = {}, orphanRemoval = false)
+    private Set<CategoryDishEntity> categoryDishes = new HashSet<>();
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

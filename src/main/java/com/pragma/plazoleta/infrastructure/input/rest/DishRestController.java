@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,11 +19,13 @@ public class DishRestController {
 
     private final IDishHandler dishHandler;
 
+    @PreAuthorize("hasRole('OWNER')")
     @PostMapping
     public ResponseEntity<CreateDishResponse> saveDish(@RequestBody @Valid CreateDishRequest createDishRequest) {
         return new ResponseEntity<>(dishHandler.saveDish(createDishRequest), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @PutMapping
     public ResponseEntity<UpdateDishResponse> updateDish(@RequestBody @Valid UpdateDishRequest updateDishRequest) {
         return new ResponseEntity<>(dishHandler.updateDish(updateDishRequest), HttpStatus.OK);

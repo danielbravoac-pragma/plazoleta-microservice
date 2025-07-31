@@ -42,8 +42,8 @@ public class DishEntity {
     @JoinColumn(name = "id_restaurant", nullable = false, foreignKey = @ForeignKey(name = "fk_dish_restaurant"))
     private RestaurantEntity restaurant;
 
-    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CategoryDishEntity> categories = new HashSet<>();
+    @OneToMany(mappedBy = "dish", cascade = {}, orphanRemoval = false)
+    private Set<CategoryDishEntity> categoryDishes = new HashSet<>();
 
     @Column(nullable = false)
     private Boolean isActive;

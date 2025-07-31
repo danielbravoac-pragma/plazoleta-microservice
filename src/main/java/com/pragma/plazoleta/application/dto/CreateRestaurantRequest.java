@@ -30,7 +30,4 @@ public class CreateRestaurantRequest {
 
     @NotBlank
     private String logoUrl;
-
-    @NotNull
-    private Long ownerId;
 }

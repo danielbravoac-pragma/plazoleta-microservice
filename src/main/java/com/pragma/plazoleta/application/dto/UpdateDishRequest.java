@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateDishRequest {
     @NotNull
-    private Long dishId;
+    private Long id;
 
     @NotNull
     @Min(value = 0, message = "Debe ser mayor o igual a 0")
