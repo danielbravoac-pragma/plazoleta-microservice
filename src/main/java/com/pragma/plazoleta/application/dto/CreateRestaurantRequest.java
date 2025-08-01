@@ -2,6 +2,7 @@ package com.pragma.plazoleta.application.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -36,4 +37,8 @@ public class CreateRestaurantRequest {
     @NotBlank
     @Schema(description = "URL de la imagen asociada al restaurante", example = "https://photourl.com/image.jpg")
     private String logoUrl;
+
+    @NotNull
+    @Schema(description = "Identificador del Propietario del Restaurante", example = "1")
+    private Long ownerId;
 }

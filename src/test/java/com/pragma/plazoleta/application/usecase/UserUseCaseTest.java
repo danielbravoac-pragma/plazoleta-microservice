@@ -2,6 +2,7 @@ package com.pragma.plazoleta.application.usecase;
 
 import com.pragma.plazoleta.domain.model.User;
 import com.pragma.plazoleta.domain.spi.IUserPersistencePort;
+import com.pragma.plazoleta.domain.usecase.UserUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

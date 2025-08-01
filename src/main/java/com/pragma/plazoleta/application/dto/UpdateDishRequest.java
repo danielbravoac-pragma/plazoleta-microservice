@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Solicitud de actualización de platos.")
 public class UpdateDishRequest {
     @NotNull
+    @Schema(description = "Identificador de plato a actualizar", example = "1")
     private Long id;
 
     @NotNull

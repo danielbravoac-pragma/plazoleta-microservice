@@ -1,4 +1,4 @@
-package com.pragma.plazoleta.application.usecase;
+package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.domain.api.IUserServicePort;
 import com.pragma.plazoleta.domain.model.User;

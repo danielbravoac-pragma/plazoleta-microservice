@@ -5,6 +5,7 @@ import com.pragma.plazoleta.domain.api.IUserServicePort;
 import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.domain.model.User;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
+import com.pragma.plazoleta.domain.usecase.RestaurantUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

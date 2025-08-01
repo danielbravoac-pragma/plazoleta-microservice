@@ -3,6 +3,7 @@ package com.pragma.plazoleta.application.usecase;
 import com.pragma.plazoleta.domain.model.Category;
 import com.pragma.plazoleta.domain.model.Dish;
 import com.pragma.plazoleta.domain.spi.ICategoryDishPersistencePort;
+import com.pragma.plazoleta.domain.usecase.CategoryDishUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

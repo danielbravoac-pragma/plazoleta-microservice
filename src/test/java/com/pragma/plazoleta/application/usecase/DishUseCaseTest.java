@@ -10,6 +10,7 @@ import com.pragma.plazoleta.domain.model.Dish;
 import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.domain.model.User;
 import com.pragma.plazoleta.domain.spi.IDishPersistencePort;
+import com.pragma.plazoleta.domain.usecase.DishUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

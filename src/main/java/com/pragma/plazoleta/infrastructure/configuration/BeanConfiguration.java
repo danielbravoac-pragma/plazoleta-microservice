@@ -1,8 +1,8 @@
 package com.pragma.plazoleta.infrastructure.configuration;
 
-import com.pragma.plazoleta.application.usecase.*;
 import com.pragma.plazoleta.domain.api.*;
 import com.pragma.plazoleta.domain.spi.*;
+import com.pragma.plazoleta.domain.usecase.*;
 import com.pragma.plazoleta.infrastructure.output.feign.adapter.UserFeignAdapter;
 import com.pragma.plazoleta.infrastructure.output.feign.client.UserClient;
 import com.pragma.plazoleta.infrastructure.output.feign.mapper.IUserResponseMapper;

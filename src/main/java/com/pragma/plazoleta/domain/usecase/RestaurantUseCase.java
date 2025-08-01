@@ -1,10 +1,11 @@
-package com.pragma.plazoleta.application.usecase;
+package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.application.exceptions.AccessDeniedException;
 import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
 import com.pragma.plazoleta.domain.api.IUserServicePort;
 import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.domain.model.User;
+import com.pragma.plazoleta.domain.model.UserRole;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -21,12 +22,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     public Restaurant saveRestaurant(Restaurant restaurant) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Long loggedUserId = Long.valueOf((String) auth.getPrincipal());
-        restaurant.setOwnerId(loggedUserId);
-
         User user = userServicePort.findById(loggedUserId);
 
-        if(user == null || !user.getRoles().contains("OWNER")){
-            throw new AccessDeniedException("Solo propietarios válidos pueden crear platos.");
+        if (user == null || !user.getRoles().contains(UserRole.ADMINISTRATOR.toString())) {
+            throw new AccessDeniedException("Solo propietarios válidos pueden crear restaurantes.");
         }
 
         return restaurantPersistencePort.saveRestaurant(restaurant);
