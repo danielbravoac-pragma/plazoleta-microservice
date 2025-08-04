@@ -66,4 +66,17 @@ public class DishRestController {
     public ResponseEntity<UpdateDishResponse> updateDish(@RequestBody @Valid UpdateDishRequest updateDishRequest) {
         return new ResponseEntity<>(dishHandler.updateDish(updateDishRequest), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('OWNER')")
+    @PatchMapping("/{id}")
+    public ResponseEntity<UpdateDishResponse> enableDish(@PathVariable(name = "id") Long id) {
+        return new ResponseEntity<>(dishHandler.enableDish(id), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('OWNER')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> disableDish(@PathVariable(name = "id") Long id) {
+        dishHandler.disableDish(id);
+        return ResponseEntity.noContent().build();
+    }
 }

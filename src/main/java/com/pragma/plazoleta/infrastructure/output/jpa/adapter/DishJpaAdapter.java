@@ -39,4 +39,13 @@ public class DishJpaAdapter implements IDishPersistencePort {
                 dishRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Dish not found"))
         );
     }
+
+    @Override
+    public Dish activeUnactiveDish(Long id, Boolean status) {
+        Dish dishUpdating = findById(id);
+        dishUpdating.setIsActive(status);
+        return dishEntityMapper.toDish(
+                dishRepository.save(dishEntityMapper.toDishEntity(dishUpdating))
+        );
+    }
 }

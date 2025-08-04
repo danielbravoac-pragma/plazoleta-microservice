@@ -1,7 +1,6 @@
 package com.pragma.plazoleta.domain.usecase;
 
 import com.pragma.plazoleta.application.exceptions.AccessDeniedException;
-
 import com.pragma.plazoleta.domain.api.*;
 import com.pragma.plazoleta.domain.model.Category;
 import com.pragma.plazoleta.domain.model.Dish;
@@ -35,7 +34,7 @@ public class DishUseCase implements IDishServicePort {
 
         User user = userServicePort.findById(loggedUserId);
 
-        if(user == null || !user.getRoles().contains("OWNER")){
+        if (user == null || !user.getRoles().contains("OWNER")) {
             throw new AccessDeniedException("Solo propietarios válidos pueden crear platos.");
         }
 
@@ -64,7 +63,7 @@ public class DishUseCase implements IDishServicePort {
 
         User user = userServicePort.findById(loggedUserId);
 
-        if(user == null || !user.getRoles().contains("OWNER")){
+        if (user == null || !user.getRoles().contains("OWNER")) {
             throw new AccessDeniedException("Solo propietarios válidos pueden actualizar platos.");
         }
 
@@ -78,5 +77,25 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public Dish findById(Long id) {
         return dishPersistencePort.findById(id);
+    }
+
+    @Override
+    public Dish activeUnactiveDish(Long id, Boolean status) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long loggedUserId = Long.valueOf((String) auth.getPrincipal());
+
+        User user = userServicePort.findById(loggedUserId);
+
+        if (user == null || !user.getRoles().contains("OWNER")) {
+            throw new AccessDeniedException("Solo propietarios válidos pueden actualizar platos.");
+        }
+
+        Dish dishUpdate = findById(id);
+
+        if (!dishUpdate.getRestaurant().getOwnerId().equals(loggedUserId)) {
+            throw new AccessDeniedException("No puedes actualizar platos en un restaurante que no es tuyo");
+        }
+
+        return dishPersistencePort.activeUnactiveDish(id, status);
     }
 }

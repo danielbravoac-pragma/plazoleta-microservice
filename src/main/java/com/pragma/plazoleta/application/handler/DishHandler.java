@@ -35,4 +35,16 @@ public class DishHandler implements IDishHandler {
                 )
         );
     }
+
+    @Override
+    public UpdateDishResponse enableDish(Long id) {
+        return dishMapper.toUpdateDishResponse(
+                dishServicePort.activeUnactiveDish(id, Boolean.TRUE)
+        );
+    }
+
+    @Override
+    public void disableDish(Long id) {
+        dishServicePort.activeUnactiveDish(id, Boolean.FALSE);
+    }
 }

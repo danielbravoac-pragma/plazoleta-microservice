@@ -8,4 +8,6 @@ public interface IDishPersistencePort {
     Dish updateDish(Dish dish);
 
     Dish findById(Long id);
+
+    Dish activeUnactiveDish(Long id, Boolean status);
 }

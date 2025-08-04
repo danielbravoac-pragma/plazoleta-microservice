@@ -8,4 +8,6 @@ public interface IDishServicePort {
     Dish updateDish(Dish dish);
 
     Dish findById(Long id);
+
+    Dish activeUnactiveDish(Long id, Boolean status);
 }
