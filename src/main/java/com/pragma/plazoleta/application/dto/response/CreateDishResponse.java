@@ -1,4 +1,4 @@
-package com.pragma.plazoleta.application.dto;
+package com.pragma.plazoleta.application.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -16,4 +16,5 @@ public class CreateDishResponse {
     private Integer price;
     @Schema(description = "Descripción del plato", example = "Deliciosa Pizza con bordes de queso parmesano.")
     private String description;
+    private String imageUrl;
 }

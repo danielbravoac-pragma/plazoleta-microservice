@@ -1,14 +1,19 @@
 package com.pragma.plazoleta.application.handler;
 
-import com.pragma.plazoleta.application.dto.CreateDishRequest;
-import com.pragma.plazoleta.application.dto.CreateDishResponse;
-import com.pragma.plazoleta.application.dto.UpdateDishRequest;
-import com.pragma.plazoleta.application.dto.UpdateDishResponse;
+import com.pragma.plazoleta.application.dto.request.CreateDishRequest;
+import com.pragma.plazoleta.application.dto.request.UpdateDishRequest;
+import com.pragma.plazoleta.application.dto.response.CreateDishResponse;
+import com.pragma.plazoleta.application.dto.response.PageResponse;
+import com.pragma.plazoleta.application.dto.response.UpdateDishResponse;
 import com.pragma.plazoleta.application.mapper.DishMapper;
 import com.pragma.plazoleta.domain.api.IDishServicePort;
+import com.pragma.plazoleta.domain.model.Dish;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +51,22 @@ public class DishHandler implements IDishHandler {
     @Override
     public void disableDish(Long id) {
         dishServicePort.activeUnactiveDish(id, Boolean.FALSE);
+    }
+
+    @Override
+    public PageResponse<CreateDishResponse> findDishesByRestaurantAndOptionalCategory(Long idCategory, Long idRestaurant, Integer page, Integer size) {
+        Page<Dish> pageDish = dishServicePort.findDishesByRestaurantAndOptionalCategory(idCategory, idRestaurant, page, size);
+        List<CreateDishResponse> content = dishMapper.toCreateDishList(pageDish.getContent());
+
+        PageResponse<CreateDishResponse> response = new PageResponse<>();
+        response.setContent(content);
+        response.setPage(pageDish.getNumber());
+        response.setSize(pageDish.getSize());
+        response.setTotalElements(pageDish.getTotalElements());
+        response.setTotalPages(pageDish.getTotalPages());
+        response.setLast(pageDish.isLast());
+
+        return response;
+
     }
 }

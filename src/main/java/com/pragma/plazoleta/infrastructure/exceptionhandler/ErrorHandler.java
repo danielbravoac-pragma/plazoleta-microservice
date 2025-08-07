@@ -1,6 +1,7 @@
 package com.pragma.plazoleta.infrastructure.exceptionhandler;
 
 import com.pragma.plazoleta.application.exceptions.AccessDeniedException;
+import com.pragma.plazoleta.application.exceptions.OrderInProgressException;
 import com.pragma.plazoleta.infrastructure.exception.DataNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,12 @@ public class ErrorHandler {
     public ResponseEntity<GenericResponse> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(new GenericResponse<>(new Info(HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED TO MAKE THIS OPERATION")), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(OrderInProgressException.class)
+    public ResponseEntity<GenericResponse> handleOrderInProgressException(OrderInProgressException ex, WebRequest request) {
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(new GenericResponse<>(new Info(HttpStatus.BAD_REQUEST.value(), "YOU HAVE AN ORDER IN PROGRESS")), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataNotFoundException.class)

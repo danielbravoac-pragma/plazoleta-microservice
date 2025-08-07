@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
@@ -17,7 +19,10 @@ public interface IRestaurantEntityMapper {
 
     RestaurantEntity toRestaurantEntity(Restaurant restaurant);
 
-    @Mapping(target = "restaurant", ignore = true) // 🚨 clave para romper el ciclo
+    List<Restaurant> toRestaurantPage(List<RestaurantEntity> restaurantEntities);
+
+    @Mapping(target = "restaurant", ignore = true)
+        // 🚨 clave para romper el ciclo
     Dish dishEntityToDish(DishEntity entity);
 
     // De entidad a modelo

@@ -1,7 +1,9 @@
 package com.pragma.plazoleta.infrastructure.input.rest;
 
-import com.pragma.plazoleta.application.dto.CreateRestaurantRequest;
-import com.pragma.plazoleta.application.dto.CreateRestaurantResponse;
+import com.pragma.plazoleta.application.dto.request.CreateRestaurantRequest;
+import com.pragma.plazoleta.application.dto.response.CreateRestaurantResponse;
+import com.pragma.plazoleta.application.dto.response.PageResponse;
+import com.pragma.plazoleta.application.dto.response.PageRestaurantResponse;
 import com.pragma.plazoleta.application.handler.IRestaurantHandler;
 import com.pragma.plazoleta.infrastructure.exceptionhandler.Info;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/restaurants", produces = "application/json")
@@ -43,5 +42,11 @@ public class RestaurantRestController {
     )
     public ResponseEntity<CreateRestaurantResponse> saveRestaurant(@Valid @RequestBody CreateRestaurantRequest createRestaurantRequest) {
         return new ResponseEntity<>(restaurantHandler.saveRestaurant(createRestaurantRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<PageRestaurantResponse>> findAllRestaurants(@RequestParam(name = "page", required = true) Integer page,
+                                                                                   @RequestParam(name = "size", required = true) Integer size) {
+        return new ResponseEntity<>(restaurantHandler.findAll(page, size), HttpStatus.OK);
     }
 }

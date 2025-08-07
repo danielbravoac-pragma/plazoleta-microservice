@@ -8,6 +8,7 @@ import com.pragma.plazoleta.domain.model.Restaurant;
 import com.pragma.plazoleta.domain.model.User;
 import com.pragma.plazoleta.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -97,5 +98,10 @@ public class DishUseCase implements IDishServicePort {
         }
 
         return dishPersistencePort.activeUnactiveDish(id, status);
+    }
+
+    @Override
+    public Page<Dish> findDishesByRestaurantAndOptionalCategory(Long idCategory, Long idRestaurant, Integer page, Integer size) {
+        return dishPersistencePort.findDishesByRestaurantAndOptionalCategory(idCategory, idRestaurant, page, size);
     }
 }

@@ -1,6 +1,7 @@
 package com.pragma.plazoleta.domain.api;
 
 import com.pragma.plazoleta.domain.model.Dish;
+import org.springframework.data.domain.Page;
 
 public interface IDishServicePort {
     Dish saveDish(Dish dish);
@@ -10,4 +11,6 @@ public interface IDishServicePort {
     Dish findById(Long id);
 
     Dish activeUnactiveDish(Long id, Boolean status);
+
+    Page<Dish> findDishesByRestaurantAndOptionalCategory(Long idCategory, Long idRestaurant, Integer page, Integer size);
 }

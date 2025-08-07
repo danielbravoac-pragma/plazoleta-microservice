@@ -1,9 +1,10 @@
 package com.pragma.plazoleta.application.handler;
 
-import com.pragma.plazoleta.application.dto.CreateDishRequest;
-import com.pragma.plazoleta.application.dto.CreateDishResponse;
-import com.pragma.plazoleta.application.dto.UpdateDishRequest;
-import com.pragma.plazoleta.application.dto.UpdateDishResponse;
+import com.pragma.plazoleta.application.dto.request.CreateDishRequest;
+import com.pragma.plazoleta.application.dto.request.UpdateDishRequest;
+import com.pragma.plazoleta.application.dto.response.CreateDishResponse;
+import com.pragma.plazoleta.application.dto.response.PageResponse;
+import com.pragma.plazoleta.application.dto.response.UpdateDishResponse;
 
 public interface IDishHandler {
     CreateDishResponse saveDish(CreateDishRequest createDishRequest);
@@ -13,4 +14,7 @@ public interface IDishHandler {
     UpdateDishResponse enableDish(Long id);
 
     void disableDish(Long id);
+
+    PageResponse<CreateDishResponse> findDishesByRestaurantAndOptionalCategory(Long idCategory, Long idRestaurant, Integer page, Integer size);
+
 }

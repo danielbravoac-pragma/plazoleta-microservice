@@ -6,17 +6,9 @@ import com.pragma.plazoleta.domain.usecase.*;
 import com.pragma.plazoleta.infrastructure.output.feign.adapter.UserFeignAdapter;
 import com.pragma.plazoleta.infrastructure.output.feign.client.UserClient;
 import com.pragma.plazoleta.infrastructure.output.feign.mapper.IUserResponseMapper;
-import com.pragma.plazoleta.infrastructure.output.jpa.adapter.CategoryDishJpaAdapter;
-import com.pragma.plazoleta.infrastructure.output.jpa.adapter.CategoryJpaAdapter;
-import com.pragma.plazoleta.infrastructure.output.jpa.adapter.DishJpaAdapter;
-import com.pragma.plazoleta.infrastructure.output.jpa.adapter.RestaurantJpaAdapter;
-import com.pragma.plazoleta.infrastructure.output.jpa.mapper.ICategoryEntityMapper;
-import com.pragma.plazoleta.infrastructure.output.jpa.mapper.IDishEntityMapper;
-import com.pragma.plazoleta.infrastructure.output.jpa.mapper.IRestaurantEntityMapper;
-import com.pragma.plazoleta.infrastructure.output.jpa.repository.ICategoryDishRepository;
-import com.pragma.plazoleta.infrastructure.output.jpa.repository.ICategoryRepository;
-import com.pragma.plazoleta.infrastructure.output.jpa.repository.IDishRepository;
-import com.pragma.plazoleta.infrastructure.output.jpa.repository.IRestaurantRepository;
+import com.pragma.plazoleta.infrastructure.output.jpa.adapter.*;
+import com.pragma.plazoleta.infrastructure.output.jpa.mapper.*;
+import com.pragma.plazoleta.infrastructure.output.jpa.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +25,43 @@ public class BeanConfiguration {
     private final ICategoryDishRepository categoryDishRepository;
     private final UserClient userClient;
     private final IUserResponseMapper userResponseMapper;
+    private final IOrderRepository orderRepository;
+    private final IOrderEntityMapper orderEntityMapper;
+    private final IStatusRepository statusRepository;
+    private final IStatusEntityMapper statusEntityMapper;
+    private final IOrderStatusRepository orderStatusRepository;
+    private final IOrderStatusEntityMapper orderStatusEntityMapper;
+
+    @Bean
+    public IOrderStatusPersistencePort orderStatusPersistencePort() {
+        return new OrderStatusJpaAdapter(orderEntityMapper, statusEntityMapper, orderStatusEntityMapper, orderStatusRepository);
+    }
+
+    @Bean
+    public IOrderStatusServicePort orderStatusServicePort() {
+        return new OrderStatusUseCase(orderStatusPersistencePort());
+    }
+
+    @Bean
+    public IStatusPersistencePort statusPersistencePort() {
+        return new StatusJpaAdapter(statusRepository, statusEntityMapper);
+    }
+
+    @Bean
+    public IStatusServicePort statusServicePort() {
+        return new StatusUseCase(statusPersistencePort());
+    }
+
+
+    @Bean
+    public IOrderPersistencePort orderPersistencePort() {
+        return new OrderJpaAdapter(orderRepository, orderEntityMapper, restaurantServicePort());
+    }
+
+    @Bean
+    public IOrderServicePort orderServicePort() {
+        return new OrderUseCase(orderPersistencePort(), dishServicePort(), restaurantServicePort(), statusServicePort(), orderStatusServicePort());
+    }
 
     @Bean
     public IUserPersistencePort userPersistencePort() {

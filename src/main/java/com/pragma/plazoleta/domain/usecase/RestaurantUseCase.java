@@ -8,6 +8,7 @@ import com.pragma.plazoleta.domain.model.User;
 import com.pragma.plazoleta.domain.model.UserRole;
 import com.pragma.plazoleta.domain.spi.IRestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -34,5 +35,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public Restaurant findById(Long id) {
         return restaurantPersistencePort.findById(id);
+    }
+
+    @Override
+    public Page<Restaurant> findAll(Integer page, Integer size) {
+        return restaurantPersistencePort.findAllPageable(page, size);
     }
 }

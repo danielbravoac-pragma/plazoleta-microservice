@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IRestaurantRepository extends IGenericRepository<RestaurantEntity, Long> {
-    Page<RestaurantEntity> findAllByPage(Pageable pageable);
+    Page<RestaurantEntity> findAll(Pageable pageable);
 }

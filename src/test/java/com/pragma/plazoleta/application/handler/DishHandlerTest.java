@@ -1,9 +1,9 @@
 package com.pragma.plazoleta.application.handler;
 
-import com.pragma.plazoleta.application.dto.CreateDishRequest;
-import com.pragma.plazoleta.application.dto.CreateDishResponse;
-import com.pragma.plazoleta.application.dto.UpdateDishRequest;
-import com.pragma.plazoleta.application.dto.UpdateDishResponse;
+import com.pragma.plazoleta.application.dto.request.CreateDishRequest;
+import com.pragma.plazoleta.application.dto.response.CreateDishResponse;
+import com.pragma.plazoleta.application.dto.request.UpdateDishRequest;
+import com.pragma.plazoleta.application.dto.response.UpdateDishResponse;
 import com.pragma.plazoleta.application.mapper.DishMapper;
 import com.pragma.plazoleta.domain.api.IDishServicePort;
 import com.pragma.plazoleta.domain.model.Dish;

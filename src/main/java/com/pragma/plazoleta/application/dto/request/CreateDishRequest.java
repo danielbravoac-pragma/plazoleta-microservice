@@ -1,7 +1,5 @@
-package com.pragma.plazoleta.application.dto;
+package com.pragma.plazoleta.application.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.pragma.plazoleta.domain.model.Restaurant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;

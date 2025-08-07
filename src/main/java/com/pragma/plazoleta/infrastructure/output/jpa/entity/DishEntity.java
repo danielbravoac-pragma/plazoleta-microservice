@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -47,6 +48,9 @@ public class DishEntity {
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @OneToMany(mappedBy = "dish",cascade = CascadeType.ALL)
+    private List<OrderDetailEntity> details;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

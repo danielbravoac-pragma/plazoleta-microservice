@@ -1,7 +1,7 @@
 package com.pragma.plazoleta.application.handler;
 
-import com.pragma.plazoleta.application.dto.CreateRestaurantRequest;
-import com.pragma.plazoleta.application.dto.CreateRestaurantResponse;
+import com.pragma.plazoleta.application.dto.request.CreateRestaurantRequest;
+import com.pragma.plazoleta.application.dto.response.CreateRestaurantResponse;
 import com.pragma.plazoleta.application.mapper.RestaurantMapper;
 import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
 import com.pragma.plazoleta.domain.model.Restaurant;

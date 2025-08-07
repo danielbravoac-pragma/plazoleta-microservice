@@ -1,9 +1,10 @@
 package com.pragma.plazoleta.infrastructure.input.rest;
 
-import com.pragma.plazoleta.application.dto.CreateDishRequest;
-import com.pragma.plazoleta.application.dto.CreateDishResponse;
-import com.pragma.plazoleta.application.dto.UpdateDishRequest;
-import com.pragma.plazoleta.application.dto.UpdateDishResponse;
+import com.pragma.plazoleta.application.dto.request.CreateDishRequest;
+import com.pragma.plazoleta.application.dto.request.UpdateDishRequest;
+import com.pragma.plazoleta.application.dto.response.CreateDishResponse;
+import com.pragma.plazoleta.application.dto.response.PageResponse;
+import com.pragma.plazoleta.application.dto.response.UpdateDishResponse;
 import com.pragma.plazoleta.application.handler.IDishHandler;
 import com.pragma.plazoleta.infrastructure.exceptionhandler.Info;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,5 +79,15 @@ public class DishRestController {
     public ResponseEntity<Void> disableDish(@PathVariable(name = "id") Long id) {
         dishHandler.disableDish(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<CreateDishResponse>> findDishesByRestaurantAndCategory(
+            @RequestParam(name = "idCategory") Long idCategory,
+            @RequestParam(name = "idRestaurant") Long idRestaurant,
+            @RequestParam(name = "page") Integer page,
+            @RequestParam(name = "size") Integer size
+    ) {
+        return new ResponseEntity<>(dishHandler.findDishesByRestaurantAndOptionalCategory(idCategory, idRestaurant, page, size), HttpStatus.OK);
     }
 }
