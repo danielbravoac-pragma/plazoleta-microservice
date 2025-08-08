@@ -1,24 +1,23 @@
 package com.pragma.plazoleta.application.handler;
 
 import com.pragma.plazoleta.application.dto.request.CreateDishRequest;
-import com.pragma.plazoleta.application.dto.response.CreateDishResponse;
 import com.pragma.plazoleta.application.dto.request.UpdateDishRequest;
+import com.pragma.plazoleta.application.dto.response.CreateDishResponse;
+import com.pragma.plazoleta.application.dto.response.PageResponse;
 import com.pragma.plazoleta.application.dto.response.UpdateDishResponse;
 import com.pragma.plazoleta.application.mapper.DishMapper;
 import com.pragma.plazoleta.domain.api.IDishServicePort;
 import com.pragma.plazoleta.domain.model.Dish;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.*;
+import org.springframework.data.domain.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 class DishHandlerTest {
 
     @Mock
@@ -30,52 +29,101 @@ class DishHandlerTest {
     @InjectMocks
     private DishHandler dishHandler;
 
-    private CreateDishRequest createDishRequest;
-    private CreateDishResponse createDishResponse;
-    private UpdateDishRequest updateDishRequest;
-    private UpdateDishResponse updateDishResponse;
-    private Dish dish;
-
     @BeforeEach
     void setUp() {
-        createDishRequest = new CreateDishRequest();
-        createDishRequest.setName("Pizza");
-
-
-        createDishRequest.setPrice((int) 25.0);
-
-        createDishResponse = new CreateDishResponse("Pizza",25,"Delicious Pizza");
-
-        updateDishRequest = new UpdateDishRequest();
-        updateDishRequest.setId(1L);
-        updateDishRequest.setDescription("Pizza Actualizada");
-
-        updateDishResponse = new UpdateDishResponse("Pizza Actualizada",35,"Pizza Deliciosa Actualizada");
-
-        dish = new Dish();
-        dish.setId(1L);
-        dish.setName("Pizza");
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void saveDish_ShouldReturnCreateDishResponse() {
-        when(dishMapper.toCreateDish(createDishRequest)).thenReturn(dish);
-        when(dishServicePort.saveDish(any(Dish.class))).thenReturn(dish);
-        when(dishMapper.toCreateDishResponse(dish)).thenReturn(createDishResponse);
+    void testSaveDish() {
+        CreateDishRequest request = new CreateDishRequest();
+        Dish domainDish = new Dish();
+        Dish savedDish = new Dish();
+        CreateDishResponse expectedResponse = new CreateDishResponse();
 
-        CreateDishResponse response = dishHandler.saveDish(createDishRequest);
+        when(dishMapper.toCreateDish(request)).thenReturn(domainDish);
+        when(dishServicePort.saveDish(domainDish)).thenReturn(savedDish);
+        when(dishMapper.toCreateDishResponse(savedDish)).thenReturn(expectedResponse);
 
-        assertEquals("Pizza", response.getName());
+        CreateDishResponse actualResponse = dishHandler.saveDish(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(dishMapper).toCreateDish(request);
+        verify(dishServicePort).saveDish(domainDish);
+        verify(dishMapper).toCreateDishResponse(savedDish);
     }
 
     @Test
-    void updateDish_ShouldReturnUpdateDishResponse() {
-        when(dishMapper.toUpdateDish(updateDishRequest)).thenReturn(dish);
-        when(dishServicePort.updateDish(any(Dish.class))).thenReturn(dish);
-        when(dishMapper.toUpdateDishResponse(dish)).thenReturn(updateDishResponse);
+    void testUpdateDish() {
+        UpdateDishRequest request = new UpdateDishRequest();
+        Dish updatedDish = new Dish();
+        Dish returnedDish = new Dish();
+        UpdateDishResponse expectedResponse = new UpdateDishResponse();
 
-        UpdateDishResponse response = dishHandler.updateDish(updateDishRequest);
+        when(dishMapper.toUpdateDish(request)).thenReturn(updatedDish);
+        when(dishServicePort.updateDish(updatedDish)).thenReturn(returnedDish);
+        when(dishMapper.toUpdateDishResponse(returnedDish)).thenReturn(expectedResponse);
 
-        assertEquals("Pizza Actualizada", response.getName());
+        UpdateDishResponse actualResponse = dishHandler.updateDish(request);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(dishMapper).toUpdateDish(request);
+        verify(dishServicePort).updateDish(updatedDish);
+        verify(dishMapper).toUpdateDishResponse(returnedDish);
+    }
+
+    @Test
+    void testEnableDish() {
+        Long dishId = 1L;
+        Dish returnedDish = new Dish();
+        UpdateDishResponse expectedResponse = new UpdateDishResponse();
+
+        when(dishServicePort.activeUnactiveDish(dishId, true)).thenReturn(returnedDish);
+        when(dishMapper.toUpdateDishResponse(returnedDish)).thenReturn(expectedResponse);
+
+        UpdateDishResponse actualResponse = dishHandler.enableDish(dishId);
+
+        assertEquals(expectedResponse, actualResponse);
+        verify(dishServicePort).activeUnactiveDish(dishId, true);
+        verify(dishMapper).toUpdateDishResponse(returnedDish);
+    }
+
+    @Test
+    void testDisableDish() {
+        Long dishId = 2L;
+
+        dishHandler.disableDish(dishId);
+
+        verify(dishServicePort).activeUnactiveDish(dishId, false);
+    }
+
+    @Test
+    void testFindDishesByRestaurantAndOptionalCategory() {
+        Long categoryId = 1L;
+        Long restaurantId = 1L;
+        int page = 0;
+        int size = 2;
+
+        Dish dish1 = new Dish();
+        Dish dish2 = new Dish();
+        Page<Dish> pageDish = new PageImpl<>(List.of(dish1, dish2), PageRequest.of(page, size), 2);
+
+        CreateDishResponse res1 = new CreateDishResponse();
+        CreateDishResponse res2 = new CreateDishResponse();
+
+        when(dishServicePort.findDishesByRestaurantAndOptionalCategory(categoryId, restaurantId, page, size)).thenReturn(pageDish);
+        when(dishMapper.toCreateDishList(List.of(dish1, dish2))).thenReturn(List.of(res1, res2));
+
+        PageResponse<CreateDishResponse> result = dishHandler.findDishesByRestaurantAndOptionalCategory(categoryId, restaurantId, page, size);
+
+        assertEquals(2, result.getContent().size());
+        assertEquals(0, result.getPage());
+        assertEquals(2, result.getSize());
+        assertEquals(2, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
+        assertTrue(result.getContent().containsAll(List.of(res1, res2)));
+
+        verify(dishServicePort).findDishesByRestaurantAndOptionalCategory(categoryId, restaurantId, page, size);
+        verify(dishMapper).toCreateDishList(List.of(dish1, dish2));
     }
 }
