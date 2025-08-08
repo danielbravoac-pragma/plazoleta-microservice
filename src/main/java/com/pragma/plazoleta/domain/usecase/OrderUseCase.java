@@ -127,7 +127,7 @@ public class OrderUseCase implements IOrderServicePort {
         String pin = String.valueOf(secureRandom.nextInt(900000) + 100000);
 
         User user = userServicePort.findById(order.getCustomerId());
-        messageServicePort.sendMessage("+51923134770", pin);
+        messageServicePort.sendMessage(user.getPhoneNumber(), pin);
 
         orderPersistencePort.updatePin(order.getId(), pin);
         return updateOrderStatus(order.getId(), status.getId());
