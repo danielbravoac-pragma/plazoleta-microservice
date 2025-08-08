@@ -42,6 +42,9 @@ public class OrderEntity {
     @Column(nullable = true)
     private Integer total;
 
+    @Column(nullable = true)
+    private String deliveryPin;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -125,4 +125,9 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
     public void updateEmployeeId(Long idOrder, Long idEmployee) {
         orderRepository.updateEmployeeIdByOrderId(idOrder, idEmployee);
     }
+
+    @Override
+    public void updatePin(Long idOrder, String pin) {
+        orderRepository.updateDeliveryPinByOrderId(idOrder, pin);
+    }
 }

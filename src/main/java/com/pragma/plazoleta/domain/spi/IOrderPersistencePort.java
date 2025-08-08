@@ -11,4 +11,6 @@ public interface IOrderPersistencePort {
     Order findById(Long id);
 
     void updateEmployeeId(Long idOrder, Long idEmployee);
+
+    void updatePin(Long idOrder, String pin);
 }

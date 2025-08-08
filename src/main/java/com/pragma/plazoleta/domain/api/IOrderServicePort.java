@@ -10,5 +10,11 @@ public interface IOrderServicePort {
 
     Order assignAndPutInProgress(Long idOrder);
 
+    Order setDoneAndAssignPin(Long idOrder);
+
+    Order setCancelOrder(Long idOrder);
+
+    Order setDeliveredOrder(Long idOrder,String pin);
+
     Page<Order> findOrdersWithLatestStatus(Long statusId, Integer page, Integer size);
 }

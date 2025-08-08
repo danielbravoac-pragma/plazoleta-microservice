@@ -32,6 +32,24 @@ public class OrderRestController {
     }
 
     @PreAuthorize("hasAnyRole('OWNER','EMPLOYEE')")
+    @PutMapping("/done")
+    public ResponseEntity<UpdateStatusOrderResponse> putDone(@RequestParam(name = "idOrder") Long idOrder) {
+        return new ResponseEntity<>(orderHandler.setDone(idOrder), HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER','EMPLOYEE')")
+    @PutMapping("/deliver")
+    public ResponseEntity<UpdateStatusOrderResponse> putDelivered(@RequestParam(name = "idOrder") Long idOrder,
+                                                                  @RequestParam(name = "pin") String pin) {
+        return new ResponseEntity<>(orderHandler.deliveredOrder(idOrder, pin), HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<UpdateStatusOrderResponse> putCancelled(@RequestParam(name = "idOrder") Long idOrder) {
+        return new ResponseEntity<>(orderHandler.cancelOrder(idOrder), HttpStatus.ACCEPTED);
+    }
+
+    @PreAuthorize("hasAnyRole('OWNER','EMPLOYEE')")
     @GetMapping
     public ResponseEntity<PageResponse<FindOrderResponse>> findOrderResponse(@RequestParam(name = "statusId") Long statusId,
                                                                              @RequestParam(name = "page") Integer page,

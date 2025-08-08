@@ -55,4 +55,31 @@ public class OrderHandler implements IOrderHandler {
         updateStatusOrderResponse.setStatus(StatusEnum.IN_PROGRESS.name());
         return updateStatusOrderResponse;
     }
+
+    @Override
+    public UpdateStatusOrderResponse setDone(Long idOrder) {
+        UpdateStatusOrderResponse doneOrder = orderMapper.toUpdateStatusOrderResponse(
+                orderServicePort.setDoneAndAssignPin(idOrder)
+        );
+        doneOrder.setStatus(StatusEnum.DONE.name());
+        return doneOrder;
+    }
+
+    @Override
+    public UpdateStatusOrderResponse cancelOrder(Long idOrder) {
+        UpdateStatusOrderResponse cancelledOrder = orderMapper.toUpdateStatusOrderResponse(
+                orderServicePort.setCancelOrder(idOrder)
+        );
+        cancelledOrder.setStatus(StatusEnum.CANCELLED.name());
+        return cancelledOrder;
+    }
+
+    @Override
+    public UpdateStatusOrderResponse deliveredOrder(Long idOrder, String pin) {
+        UpdateStatusOrderResponse deliveredOrder = orderMapper.toUpdateStatusOrderResponse(
+                orderServicePort.setDeliveredOrder(idOrder, pin)
+        );
+        deliveredOrder.setStatus(StatusEnum.DELIVERED.name());
+        return deliveredOrder;
+    }
 }

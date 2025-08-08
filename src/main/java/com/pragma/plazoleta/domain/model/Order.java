@@ -17,4 +17,5 @@ public class Order {
     private List<OrderDetail> details;
     private Integer total;
     private Restaurant restaurant;
+    private String deliveryPin;
 }

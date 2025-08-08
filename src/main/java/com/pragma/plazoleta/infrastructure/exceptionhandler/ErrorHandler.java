@@ -2,6 +2,7 @@ package com.pragma.plazoleta.infrastructure.exceptionhandler;
 
 import com.pragma.plazoleta.application.exceptions.AccessDeniedException;
 import com.pragma.plazoleta.application.exceptions.OrderInProgressException;
+import com.pragma.plazoleta.application.exceptions.OrderPinInvalidException;
 import com.pragma.plazoleta.infrastructure.exception.DataNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,11 @@ public class ErrorHandler {
     @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
     public ResponseEntity<GenericResponse> handleAccessDenied(org.springframework.security.access.AccessDeniedException ex, HttpServletRequest request) {
         return new ResponseEntity<>(new GenericResponse<>(new Info(HttpStatus.UNAUTHORIZED.value(), "DON'T HAVE PERMISSION TO ACCESS THIS OPERATION CHECK YOUR SESSION")), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(OrderPinInvalidException.class)
+    public ResponseEntity<GenericResponse> handleOrderPinInvalidException(OrderPinInvalidException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(new GenericResponse<>(new Info(HttpStatus.UNAUTHORIZED.value(), "INCORRECT PIN. CHECK WITH YOUR MESSAGE SERVICE")), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(BadCredentialsException.class)

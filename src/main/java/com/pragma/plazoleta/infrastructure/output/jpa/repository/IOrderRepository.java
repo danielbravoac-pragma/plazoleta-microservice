@@ -29,5 +29,10 @@ public interface IOrderRepository extends IGenericRepository<OrderEntity, Long> 
     void updateEmployeeIdByOrderId(@Param("orderId") Long orderId,
                                    @Param("employeeId") Long employeeId);
 
+    @Modifying
+    @Query("UPDATE OrderEntity o SET o.deliveryPin = :deliveryPin WHERE o.id = :orderId")
+    void updateDeliveryPinByOrderId(@Param("orderId") Long orderId,
+                                    @Param("deliveryPin") String deliveryPin);
+
 
 }

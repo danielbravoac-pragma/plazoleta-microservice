@@ -12,4 +12,10 @@ public interface IOrderHandler {
     PageResponse<FindOrderResponse> findOrdersWithLatestStatus(Long statusId, Integer page, Integer size);
 
     UpdateStatusOrderResponse assignEmployeeAndPutInProgress(Long idOrder);
+
+    UpdateStatusOrderResponse setDone(Long idOrder);
+
+    UpdateStatusOrderResponse cancelOrder(Long idOrder);
+
+    UpdateStatusOrderResponse deliveredOrder(Long idOrder, String pin);
 }
