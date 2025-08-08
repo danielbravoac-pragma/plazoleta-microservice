@@ -12,4 +12,6 @@ public interface IOrderStatusPersistencePort {
     List<OrderStatus> findActiveOrdersByCustomer(Long customerId, List<String> statusList);
 
     OrderStatus findById(Long idOrder, Long idStatus);
+
+    List<OrderStatus> findOrdersByOrderId(Long orderId);
 }

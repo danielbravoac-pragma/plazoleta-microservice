@@ -28,4 +28,10 @@ public class OrderStatusUseCase implements IOrderStatusServicePort {
     public OrderStatus findById(Long idOrder, Long idStatus) {
         return orderStatusPersistencePort.findById(idOrder, idStatus);
     }
+
+    @Override
+    public List<OrderStatus> findOrdersByOrderId(Long orderId) {
+        List<OrderStatus> orderStatusList = orderStatusPersistencePort.findOrdersByOrderId(orderId);
+        return orderStatusList;
+    }
 }

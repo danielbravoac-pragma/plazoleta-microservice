@@ -5,6 +5,7 @@ import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
 import com.pragma.plazoleta.application.dto.response.*;
 import com.pragma.plazoleta.domain.model.Order;
 import com.pragma.plazoleta.domain.model.OrderDetail;
+import com.pragma.plazoleta.domain.model.OrderStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -42,6 +43,13 @@ public interface OrderMapper {
     List<OrderDetail> toOrderDetailList(List<CreateOrderDetailsRequest> details);
 
     List<CreateOrderDetailsResponse> toCreateOrderDetailsResponseList(List<OrderDetail> orderDetailList);
+
+
+    @Mapping(target = "status", source = "status.name")
+    GetOrderDetailTraceabilityResponse toGetOrderDetailTraceabilityResponse(OrderStatus orderDetail);
+
+
+    List<GetOrderDetailTraceabilityResponse> toGetOrderDetailTraceabilityResponseList(List<OrderStatus> orderStatusList);
 
 
 }

@@ -19,4 +19,12 @@ public interface IOrderStatusRepository extends IGenericRepository<OrderStatusEn
             @Param("customerId") Long customerId,
             @Param("statusList") List<String> statusList
     );
+
+    @Query("""
+            SELECT os FROM OrderStatusEntity os
+            WHERE os.order.id = :orderId
+            """)
+    List<OrderStatusEntity> findOrdersByOrderId(
+            @Param("orderId") Long orderId
+    );
 }

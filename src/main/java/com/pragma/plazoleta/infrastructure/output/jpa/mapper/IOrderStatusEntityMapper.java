@@ -19,6 +19,7 @@ public interface IOrderStatusEntityMapper {
     OrderStatusEntity toOrderStatusEntity(OrderStatus orderStatus);
 
     @Mapping(target = "order", ignore = true)
+    @Mapping(target = "assignedDate",source = "dateRegistration")
     OrderStatus toOrderStatus(OrderStatusEntity orderStatusEntity);
 
     List<OrderStatus> toOrderStatusList(List<OrderStatusEntity> orderStatusEntityList);

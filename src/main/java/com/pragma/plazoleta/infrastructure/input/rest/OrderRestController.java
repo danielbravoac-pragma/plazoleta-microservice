@@ -1,10 +1,7 @@
 package com.pragma.plazoleta.infrastructure.input.rest;
 
 import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
-import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
-import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
-import com.pragma.plazoleta.application.dto.response.PageResponse;
-import com.pragma.plazoleta.application.dto.response.UpdateStatusOrderResponse;
+import com.pragma.plazoleta.application.dto.response.*;
 import com.pragma.plazoleta.application.handler.IOrderHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -55,6 +54,11 @@ public class OrderRestController {
                                                                              @RequestParam(name = "page") Integer page,
                                                                              @RequestParam(name = "size") Integer size) {
         return new ResponseEntity<>(orderHandler.findOrdersWithLatestStatus(statusId, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("/trace")
+    public ResponseEntity<List<GetOrderDetailTraceabilityResponse>> getTraceability(@RequestParam(name = "idOrder") Long idOrder) {
+        return new ResponseEntity<>(orderHandler.getDetailOrder(idOrder), HttpStatus.OK);
     }
 
 

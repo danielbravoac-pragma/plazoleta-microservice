@@ -4,7 +4,6 @@ import com.pragma.plazoleta.domain.model.Order;
 import com.pragma.plazoleta.domain.model.OrderStatus;
 import com.pragma.plazoleta.domain.model.Status;
 import com.pragma.plazoleta.domain.spi.IOrderStatusPersistencePort;
-import com.pragma.plazoleta.infrastructure.exception.DataNotFoundException;
 import com.pragma.plazoleta.infrastructure.output.jpa.entity.OrderStatusEntity;
 import com.pragma.plazoleta.infrastructure.output.jpa.entity.OrderStatusId;
 import com.pragma.plazoleta.infrastructure.output.jpa.mapper.IOrderEntityMapper;
@@ -46,6 +45,15 @@ public class OrderStatusJpaAdapter implements IOrderStatusPersistencePort {
     public OrderStatus findById(Long idOrder, Long idStatus) {
         return orderStatusEntityMapper.toOrderStatus(
                 orderStatusRepository.findById(new OrderStatusId(idOrder, idStatus)).orElse(null)
+        );
+    }
+
+    @Override
+    public List<OrderStatus> findOrdersByOrderId(Long orderId) {
+        List<OrderStatusEntity> orderStatusList=orderStatusRepository.findOrdersByOrderId(orderId);
+
+        return orderStatusEntityMapper.toOrderStatusList(
+                orderStatusList
         );
     }
 }

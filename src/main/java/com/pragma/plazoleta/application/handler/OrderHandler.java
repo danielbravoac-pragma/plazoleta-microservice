@@ -1,12 +1,10 @@
 package com.pragma.plazoleta.application.handler;
 
 import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
-import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
-import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
-import com.pragma.plazoleta.application.dto.response.PageResponse;
-import com.pragma.plazoleta.application.dto.response.UpdateStatusOrderResponse;
+import com.pragma.plazoleta.application.dto.response.*;
 import com.pragma.plazoleta.application.mapper.OrderMapper;
 import com.pragma.plazoleta.domain.api.IOrderServicePort;
+import com.pragma.plazoleta.domain.api.IOrderStatusServicePort;
 import com.pragma.plazoleta.domain.model.Order;
 import com.pragma.plazoleta.domain.model.StatusEnum;
 import jakarta.transaction.Transactional;
@@ -22,6 +20,7 @@ import java.util.List;
 public class OrderHandler implements IOrderHandler {
 
     private final IOrderServicePort orderServicePort;
+    private final IOrderStatusServicePort orderStatusServicePort;
     private final OrderMapper orderMapper;
 
     @Override
@@ -81,5 +80,12 @@ public class OrderHandler implements IOrderHandler {
         );
         deliveredOrder.setStatus(StatusEnum.DELIVERED.name());
         return deliveredOrder;
+    }
+
+    @Override
+    public List<GetOrderDetailTraceabilityResponse> getDetailOrder(Long idOrder) {
+        return orderMapper.toGetOrderDetailTraceabilityResponseList(
+                orderStatusServicePort.findOrdersByOrderId(idOrder)
+        );
     }
 }

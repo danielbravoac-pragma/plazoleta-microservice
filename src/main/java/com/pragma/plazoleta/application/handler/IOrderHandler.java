@@ -1,10 +1,9 @@
 package com.pragma.plazoleta.application.handler;
 
 import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
-import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
-import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
-import com.pragma.plazoleta.application.dto.response.PageResponse;
-import com.pragma.plazoleta.application.dto.response.UpdateStatusOrderResponse;
+import com.pragma.plazoleta.application.dto.response.*;
+
+import java.util.List;
 
 public interface IOrderHandler {
     CreateOrderResponse saveOrder(CreateOrderRequest createOrderRequest);
@@ -18,4 +17,6 @@ public interface IOrderHandler {
     UpdateStatusOrderResponse cancelOrder(Long idOrder);
 
     UpdateStatusOrderResponse deliveredOrder(Long idOrder, String pin);
+
+    List<GetOrderDetailTraceabilityResponse> getDetailOrder(Long idOrder);
 }
