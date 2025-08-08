@@ -5,6 +5,11 @@ import com.pragma.plazoleta.domain.api.*;
 import com.pragma.plazoleta.domain.model.*;
 import com.pragma.plazoleta.domain.spi.IOrderPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Transient;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,6 +23,8 @@ public class OrderUseCase implements IOrderServicePort {
     private final IRestaurantServicePort restaurantServicePort;
     private final IStatusServicePort statusServicePort;
     private final IOrderStatusServicePort orderStatusServicePort;
+
+    private final IUserServicePort userServicePort;
 
 
     @Override
@@ -56,5 +63,18 @@ public class OrderUseCase implements IOrderServicePort {
         );
 
         return savedOrder;
+    }
+
+    @Override
+    public Page<Order> findOrdersWithLatestStatus(Long statusId, Integer page, Integer size) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long loggedUserId = Long.valueOf((String) auth.getPrincipal());
+        User user = userServicePort.findById(loggedUserId);
+
+        if (statusId == null) {
+            statusId = 2L;
+        }
+
+        return orderPersistencePort.findOrdersWithLatestStatus(statusId, user.getRestaurantId(), page, size);
     }
 }

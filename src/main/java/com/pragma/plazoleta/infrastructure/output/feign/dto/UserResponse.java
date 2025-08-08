@@ -13,4 +13,5 @@ public class UserResponse {
     private Long id;
     private String name;
     private List<String> roles;
+    private Long restaurantId;
 }

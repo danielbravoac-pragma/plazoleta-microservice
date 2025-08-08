@@ -4,6 +4,8 @@ import com.pragma.plazoleta.application.dto.request.CreateOrderDetailsRequest;
 import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
 import com.pragma.plazoleta.application.dto.response.CreateOrderDetailsResponse;
 import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
+import com.pragma.plazoleta.application.dto.response.FindOrderDetailResponse;
+import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
 import com.pragma.plazoleta.domain.model.Order;
 import com.pragma.plazoleta.domain.model.OrderDetail;
 import org.mapstruct.Mapper;
@@ -24,13 +26,23 @@ public interface OrderMapper {
     @Mapping(source = "dish.name", target = "dishName")
     CreateOrderDetailsResponse toCreateOrderDetailsResponse(OrderDetail orderDetail);
 
+    @Mapping(source = "restaurant.id", target = "restaurantId")
+    FindOrderResponse toFindOrderResponse(Order order);
+
+    @Mapping(source = "dish.id", target = "dishId")
+    FindOrderDetailResponse toFindOrderDetailResponse(OrderDetail orderDetail);
+
+    List<FindOrderDetailResponse> toFindOrderDetailResponseList(List<OrderDetail> orderDetailList);
 
     @Mapping(target = "order", ignore = true)
     @Mapping(source = "dishId", target = "dish.id")
     OrderDetail toOrderDetail(CreateOrderDetailsRequest createOrderDetailsRequest);
 
+    List<FindOrderResponse> toFindOrderResponseList(List<Order> orderList);
+
     List<OrderDetail> toOrderDetailList(List<CreateOrderDetailsRequest> details);
 
     List<CreateOrderDetailsResponse> toCreateOrderDetailsResponseList(List<OrderDetail> orderDetailList);
+
 
 }
