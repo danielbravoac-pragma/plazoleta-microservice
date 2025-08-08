@@ -6,5 +6,9 @@ import org.springframework.data.domain.Page;
 public interface IOrderServicePort {
     Order saveOrder(Order order);
 
+    Order updateOrderStatus(Long idOrder, Long idStatus);
+
+    Order assignAndPutInProgress(Long idOrder);
+
     Page<Order> findOrdersWithLatestStatus(Long statusId, Integer page, Integer size);
 }

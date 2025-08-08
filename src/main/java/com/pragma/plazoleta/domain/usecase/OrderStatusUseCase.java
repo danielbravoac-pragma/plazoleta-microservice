@@ -23,4 +23,9 @@ public class OrderStatusUseCase implements IOrderStatusServicePort {
     public List<OrderStatus> findActiveOrdersByCustomer(Long customerId, List<String> statusList) {
         return orderStatusPersistencePort.findActiveOrdersByCustomer(customerId, statusList);
     }
+
+    @Override
+    public OrderStatus findById(Long idOrder, Long idStatus) {
+        return orderStatusPersistencePort.findById(idOrder, idStatus);
+    }
 }

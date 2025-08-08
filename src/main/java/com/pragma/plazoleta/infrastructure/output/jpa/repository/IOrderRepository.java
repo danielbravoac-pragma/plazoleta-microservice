@@ -4,6 +4,7 @@ import com.pragma.plazoleta.infrastructure.output.jpa.entity.OrderEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -22,5 +23,11 @@ public interface IOrderRepository extends IGenericRepository<OrderEntity, Long> 
     Page<OrderEntity> findOrdersWithLatestStatus(@Param("statusId") Long statusId,
                                                  @Param("restaurantId") Long restaurantId,
                                                  Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE OrderEntity o SET o.employeeId = :employeeId WHERE o.id = :orderId")
+    void updateEmployeeIdByOrderId(@Param("orderId") Long orderId,
+                                   @Param("employeeId") Long employeeId);
+
 
 }

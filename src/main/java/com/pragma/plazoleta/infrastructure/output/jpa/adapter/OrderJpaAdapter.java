@@ -3,6 +3,7 @@ package com.pragma.plazoleta.infrastructure.output.jpa.adapter;
 import com.pragma.plazoleta.domain.api.IRestaurantServicePort;
 import com.pragma.plazoleta.domain.model.Order;
 import com.pragma.plazoleta.domain.spi.IOrderPersistencePort;
+import com.pragma.plazoleta.infrastructure.exception.DataNotFoundException;
 import com.pragma.plazoleta.infrastructure.output.jpa.entity.OrderEntity;
 import com.pragma.plazoleta.infrastructure.output.jpa.mapper.IOrderEntityMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.repository.IOrderRepository;
@@ -113,5 +114,15 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
                 return null;
             }
         };
+    }
+
+    @Override
+    public Order findById(Long id) {
+        return orderEntityMapper.toOrder(orderRepository.findById(id).orElseThrow(() -> new DataNotFoundException("Order not found")));
+    }
+
+    @Override
+    public void updateEmployeeId(Long idOrder, Long idEmployee) {
+        orderRepository.updateEmployeeIdByOrderId(idOrder, idEmployee);
     }
 }

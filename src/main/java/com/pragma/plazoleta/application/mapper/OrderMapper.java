@@ -2,10 +2,7 @@ package com.pragma.plazoleta.application.mapper;
 
 import com.pragma.plazoleta.application.dto.request.CreateOrderDetailsRequest;
 import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
-import com.pragma.plazoleta.application.dto.response.CreateOrderDetailsResponse;
-import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
-import com.pragma.plazoleta.application.dto.response.FindOrderDetailResponse;
-import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
+import com.pragma.plazoleta.application.dto.response.*;
 import com.pragma.plazoleta.domain.model.Order;
 import com.pragma.plazoleta.domain.model.OrderDetail;
 import org.mapstruct.Mapper;
@@ -31,6 +28,8 @@ public interface OrderMapper {
 
     @Mapping(source = "dish.id", target = "dishId")
     FindOrderDetailResponse toFindOrderDetailResponse(OrderDetail orderDetail);
+
+    UpdateStatusOrderResponse toUpdateStatusOrderResponse(Order order);
 
     List<FindOrderDetailResponse> toFindOrderDetailResponseList(List<OrderDetail> orderDetailList);
 

@@ -4,9 +4,11 @@ import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
 import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
 import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
 import com.pragma.plazoleta.application.dto.response.PageResponse;
+import com.pragma.plazoleta.application.dto.response.UpdateStatusOrderResponse;
 import com.pragma.plazoleta.application.mapper.OrderMapper;
 import com.pragma.plazoleta.domain.api.IOrderServicePort;
 import com.pragma.plazoleta.domain.model.Order;
+import com.pragma.plazoleta.domain.model.StatusEnum;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,9 +26,11 @@ public class OrderHandler implements IOrderHandler {
 
     @Override
     public CreateOrderResponse saveOrder(CreateOrderRequest createOrderRequest) {
-        return orderMapper.toCreateOrderResponse(orderServicePort.saveOrder(
+        CreateOrderResponse createOrderResponse = orderMapper.toCreateOrderResponse(orderServicePort.saveOrder(
                 orderMapper.toOrder(createOrderRequest)
         ));
+        createOrderResponse.setStatus(StatusEnum.PENDING.name());
+        return createOrderResponse;
     }
 
     @Override
@@ -43,5 +47,12 @@ public class OrderHandler implements IOrderHandler {
         response.setLast(pageOrder.isLast());
 
         return response;
+    }
+
+    @Override
+    public UpdateStatusOrderResponse assignEmployeeAndPutInProgress(Long idOrder) {
+        UpdateStatusOrderResponse updateStatusOrderResponse = orderMapper.toUpdateStatusOrderResponse(orderServicePort.assignAndPutInProgress(idOrder));
+        updateStatusOrderResponse.setStatus(StatusEnum.IN_PROGRESS.name());
+        return updateStatusOrderResponse;
     }
 }

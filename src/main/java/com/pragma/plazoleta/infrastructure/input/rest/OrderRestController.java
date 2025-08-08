@@ -4,6 +4,7 @@ import com.pragma.plazoleta.application.dto.request.CreateOrderRequest;
 import com.pragma.plazoleta.application.dto.response.CreateOrderResponse;
 import com.pragma.plazoleta.application.dto.response.FindOrderResponse;
 import com.pragma.plazoleta.application.dto.response.PageResponse;
+import com.pragma.plazoleta.application.dto.response.UpdateStatusOrderResponse;
 import com.pragma.plazoleta.application.handler.IOrderHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ public class OrderRestController {
         return new ResponseEntity<>(orderHandler.saveOrder(createOrderRequest), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('OWNER','EMPLOYEE')")
+    @PutMapping("/in-progress")
+    public ResponseEntity<UpdateStatusOrderResponse> putInProgress(@RequestParam(name = "idOrder") Long idOrder) {
+        return new ResponseEntity<>(orderHandler.assignEmployeeAndPutInProgress(idOrder), HttpStatus.ACCEPTED);
+    }
 
     @PreAuthorize("hasAnyRole('OWNER','EMPLOYEE')")
     @GetMapping
@@ -32,4 +38,6 @@ public class OrderRestController {
                                                                              @RequestParam(name = "size") Integer size) {
         return new ResponseEntity<>(orderHandler.findOrdersWithLatestStatus(statusId, page, size), HttpStatus.OK);
     }
+
+
 }

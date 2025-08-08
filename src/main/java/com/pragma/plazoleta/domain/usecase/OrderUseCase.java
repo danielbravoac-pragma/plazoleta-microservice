@@ -7,9 +7,7 @@ import com.pragma.plazoleta.domain.spi.IOrderPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.Transient;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -64,6 +62,32 @@ public class OrderUseCase implements IOrderServicePort {
 
         return savedOrder;
     }
+
+    @Override
+    public Order updateOrderStatus(Long idOrder, Long idStatus) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long loggedUserId = Long.valueOf((String) auth.getPrincipal());
+        User user = userServicePort.findById(loggedUserId);
+
+        Order order = orderPersistencePort.findById(idOrder);
+        Status status = statusServicePort.findById(idStatus);
+
+        if (orderStatusServicePort.findById(idOrder, idStatus) != null) {
+            throw new OrderInProgressException("Order is already registered in this status");
+        }
+
+        orderPersistencePort.updateEmployeeId(order.getId(), user.getId());
+        order.setEmployeeId(user.getId());
+        orderStatusServicePort.saveOrderStatus(order, status);
+        return order;
+    }
+
+    @Override
+    public Order assignAndPutInProgress(Long idOrder) {
+        Status status = statusServicePort.findByName(StatusEnum.IN_PROGRESS.toString());
+        return updateOrderStatus(idOrder, status.getId());
+    }
+
 
     @Override
     public Page<Order> findOrdersWithLatestStatus(Long statusId, Integer page, Integer size) {

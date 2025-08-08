@@ -10,4 +10,6 @@ public interface IOrderStatusPersistencePort {
     void saveOrderStatus(Order order, Status status);
 
     List<OrderStatus> findActiveOrdersByCustomer(Long customerId, List<String> statusList);
+
+    OrderStatus findById(Long idOrder, Long idStatus);
 }

@@ -14,4 +14,9 @@ public class StatusUseCase implements IStatusServicePort {
     public Status findByName(String name) {
         return statusPersistencePort.findByName(name);
     }
+
+    @Override
+    public Status findById(Long id) {
+        return statusPersistencePort.findById(id);
+    }
 }
