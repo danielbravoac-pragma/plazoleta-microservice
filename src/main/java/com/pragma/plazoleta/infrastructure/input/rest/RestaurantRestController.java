@@ -32,7 +32,7 @@ public class RestaurantRestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             description = "Realiza la creación de un restaurante asociado al propietario.",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Restaurante creado con éxito",
+                    @ApiResponse(responseCode = "201", description = "Restaurante creado con éxito",
                             content = @Content(schema = @Schema(implementation = CreateRestaurantResponse.class))),
                     @ApiResponse(responseCode = "401", description = "El Usuario no puede crear Restaurantes",
                             content = @Content(schema = @Schema(implementation = Info.class))),
@@ -44,9 +44,22 @@ public class RestaurantRestController {
         return new ResponseEntity<>(restaurantHandler.saveRestaurant(createRestaurantRequest), HttpStatus.CREATED);
     }
 
+
+    @Operation(
+            summary = "Listar todos los restaurantes",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            description = "Realiza el listado de restaurantes disponibles.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Listado de restaurantes.",
+                            content = @Content(schema = @Schema(implementation = PageResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+                            content = @Content(schema = @Schema(implementation = Info.class))),
+                    @ApiResponse(responseCode = "500", description = "Error Interno")
+            }
+    )
     @GetMapping
-    public ResponseEntity<PageResponse<PageRestaurantResponse>> findAllRestaurants(@RequestParam(name = "page", required = true) Integer page,
-                                                                                   @RequestParam(name = "size", required = true) Integer size) {
+    public ResponseEntity<PageResponse<PageRestaurantResponse>> findAllRestaurants(@RequestParam(name = "page", required = true, value = "0") Integer page,
+                                                                                   @RequestParam(name = "size", required = true, value = "5") Integer size) {
         return new ResponseEntity<>(restaurantHandler.findAll(page, size), HttpStatus.OK);
     }
 }

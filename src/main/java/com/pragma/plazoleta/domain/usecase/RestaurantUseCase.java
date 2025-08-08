@@ -26,7 +26,13 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         User user = userServicePort.findById(loggedUserId);
 
         if (user == null || !user.getRoles().contains(UserRole.ADMINISTRATOR.toString())) {
-            throw new AccessDeniedException("Solo propietarios válidos pueden crear restaurantes.");
+            throw new AccessDeniedException("Solo administradores válidos pueden crear restaurantes.");
+        }
+
+        User userOwner = userServicePort.findById(restaurant.getOwnerId());
+
+        if (!userOwner.getRoles().contains(UserRole.OWNER.toString())) {
+            throw new AccessDeniedException("Solo se pueden asignar propietarios");
         }
 
         return restaurantPersistencePort.saveRestaurant(restaurant);

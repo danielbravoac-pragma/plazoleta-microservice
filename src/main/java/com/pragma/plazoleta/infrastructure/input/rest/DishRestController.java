@@ -69,18 +69,61 @@ public class DishRestController {
     }
 
     @PreAuthorize("hasRole('OWNER')")
+    @Operation(
+            summary = "Activar Plato",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            description = "Realiza la actualización de un plato asociado a un restaurante donde el usuario es propietario.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Plato actualizado con éxito",
+                            content = @Content(schema = @Schema(implementation = UpdateDishResponse.class))),
+                    @ApiResponse(responseCode = "401", description = "El Usuario no es Propietario o no puede actualizar platos",
+                            content = @Content(schema = @Schema(implementation = Info.class))),
+                    @ApiResponse(responseCode = "404", description = "Plato no encontrado para actualizar",
+                            content = @Content(schema = @Schema(implementation = Info.class))),
+                    @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+                            content = @Content(schema = @Schema(implementation = Info.class)))
+            }
+    )
     @PatchMapping("/{id}")
     public ResponseEntity<UpdateDishResponse> enableDish(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(dishHandler.enableDish(id), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('OWNER')")
+    @Operation(
+            summary = "Desactivar Plato",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            description = "Realiza la actualización de un plato asociado a un restaurante donde el usuario es propietario.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Plato actualizado con éxito",
+                            content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+                    @ApiResponse(responseCode = "401", description = "El Usuario no es Propietario o no puede actualizar platos",
+                            content = @Content(schema = @Schema(implementation = Info.class))),
+                    @ApiResponse(responseCode = "404", description = "Plato no encontrado para actualizar",
+                            content = @Content(schema = @Schema(implementation = Info.class))),
+                    @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+                            content = @Content(schema = @Schema(implementation = Info.class)))
+            }
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> disableDish(@PathVariable(name = "id") Long id) {
         dishHandler.disableDish(id);
         return ResponseEntity.noContent().build();
     }
 
+
+    @Operation(
+            summary = "Listar todos los platos filtrados por restaurante y categoria",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            description = "Listar todos los platos filtrados por restaurante y categoria.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Listado de platos.",
+                            content = @Content(schema = @Schema(implementation = CreateDishResponse.class))),
+                    @ApiResponse(responseCode = "400", description = "Parámetros inválidos",
+                            content = @Content(schema = @Schema(implementation = Info.class))),
+                    @ApiResponse(responseCode = "500", description = "Error Interno")
+            }
+    )
     @GetMapping
     public ResponseEntity<PageResponse<CreateDishResponse>> findDishesByRestaurantAndCategory(
             @RequestParam(name = "idCategory") Long idCategory,
