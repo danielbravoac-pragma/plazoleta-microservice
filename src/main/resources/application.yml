@@ -17,3 +17,6 @@ jwt:
 
 users:
   url: http://localhost:8081
+
+messages:
+  url: http://localhost:8082

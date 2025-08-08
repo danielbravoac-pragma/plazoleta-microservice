@@ -28,6 +28,8 @@ public class OrderUseCase implements IOrderServicePort {
 
     private final IUserServicePort userServicePort;
 
+    private final IMessageServicePort messageServicePort;
+
     private static final SecureRandom secureRandom = new SecureRandom();
 
 
@@ -123,6 +125,10 @@ public class OrderUseCase implements IOrderServicePort {
         }
 
         String pin = String.valueOf(secureRandom.nextInt(900000) + 100000);
+
+        User user = userServicePort.findById(order.getCustomerId());
+        messageServicePort.sendMessage("+51923134770", pin);
+
         orderPersistencePort.updatePin(order.getId(), pin);
         return updateOrderStatus(order.getId(), status.getId());
     }

@@ -14,4 +14,5 @@ public class User {
     private String name;
     private List<String> roles;
     private Long restaurantId;
+    private String phoneNumber;
 }

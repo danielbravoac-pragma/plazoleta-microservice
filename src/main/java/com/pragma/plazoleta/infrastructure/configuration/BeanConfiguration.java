@@ -3,7 +3,9 @@ package com.pragma.plazoleta.infrastructure.configuration;
 import com.pragma.plazoleta.domain.api.*;
 import com.pragma.plazoleta.domain.spi.*;
 import com.pragma.plazoleta.domain.usecase.*;
+import com.pragma.plazoleta.infrastructure.output.feign.adapter.MessageFeignAdapter;
 import com.pragma.plazoleta.infrastructure.output.feign.adapter.UserFeignAdapter;
+import com.pragma.plazoleta.infrastructure.output.feign.client.MessageClient;
 import com.pragma.plazoleta.infrastructure.output.feign.client.UserClient;
 import com.pragma.plazoleta.infrastructure.output.feign.mapper.IUserResponseMapper;
 import com.pragma.plazoleta.infrastructure.output.jpa.adapter.*;
@@ -31,6 +33,17 @@ public class BeanConfiguration {
     private final IStatusEntityMapper statusEntityMapper;
     private final IOrderStatusRepository orderStatusRepository;
     private final IOrderStatusEntityMapper orderStatusEntityMapper;
+    private final MessageClient messageClient;
+
+    @Bean
+    public IMessagePersistencePort messagePersistencePort() {
+        return new MessageFeignAdapter(messageClient);
+    }
+
+    @Bean
+    public IMessageServicePort messageServicePort() {
+        return new MessageUseCase(messagePersistencePort());
+    }
 
     @Bean
     public IOrderStatusPersistencePort orderStatusPersistencePort() {
@@ -60,7 +73,7 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(orderPersistencePort(), dishServicePort(), restaurantServicePort(), statusServicePort(), orderStatusServicePort(), userServicePort());
+        return new OrderUseCase(orderPersistencePort(), dishServicePort(), restaurantServicePort(), statusServicePort(), orderStatusServicePort(), userServicePort(), messageServicePort());
     }
 
     @Bean
