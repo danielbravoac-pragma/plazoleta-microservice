@@ -34,6 +34,18 @@ public class BeanConfiguration {
     private final IOrderStatusRepository orderStatusRepository;
     private final IOrderStatusEntityMapper orderStatusEntityMapper;
     private final MessageClient messageClient;
+    private final IReportRepository reportRepository;
+
+    @Bean
+    public IReportPersistencePort reportPersistencePort() {
+        return new ReportJpaAdapter(reportRepository);
+    }
+
+    @Bean
+    public IReportServicePort reportServicePort() {
+        return new ReportUseCase(reportPersistencePort(), userServicePort());
+    }
+
 
     @Bean
     public IMessagePersistencePort messagePersistencePort() {
@@ -52,7 +64,7 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderStatusServicePort orderStatusServicePort() {
-        return new OrderStatusUseCase(orderStatusPersistencePort());
+        return new OrderStatusUseCase(orderStatusPersistencePort(), orderPersistencePort());
     }
 
     @Bean
