@@ -35,7 +35,7 @@ public class DishRestController {
             security = @SecurityRequirement(name = "bearerAuth"),
             description = "Realiza la creación del plato asociado a un restaurante donde el usuario es propietario.",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Plato creado con éxito",
+                    @ApiResponse(responseCode = "201", description = "Plato creado con éxito",
                             content = @Content(schema = @Schema(implementation = CreateDishResponse.class))),
                     @ApiResponse(responseCode = "401", description = "El Usuario no es Propietario o no puede crear platos",
                             content = @Content(schema = @Schema(implementation = Info.class))),
@@ -96,7 +96,7 @@ public class DishRestController {
             description = "Realiza la actualización de un plato asociado a un restaurante donde el usuario es propietario.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Plato actualizado con éxito",
-                            content = @Content(schema = @Schema(implementation = ResponseEntity.class))),
+                            content = @Content(schema = @Schema(implementation = Void.class))),
                     @ApiResponse(responseCode = "401", description = "El Usuario no es Propietario o no puede actualizar platos",
                             content = @Content(schema = @Schema(implementation = Info.class))),
                     @ApiResponse(responseCode = "404", description = "Plato no encontrado para actualizar",

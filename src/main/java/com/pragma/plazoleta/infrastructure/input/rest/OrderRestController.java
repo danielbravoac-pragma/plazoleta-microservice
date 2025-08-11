@@ -132,9 +132,9 @@ public class OrderRestController {
             }
     )
     @GetMapping
-    public ResponseEntity<PageResponse<FindOrderResponse>> findOrderResponse(@RequestParam(name = "statusId", value = "2", required = true) Long statusId,
-                                                                             @RequestParam(name = "page", value = "0", required = true) Integer page,
-                                                                             @RequestParam(name = "size", value = "10", required = true) Integer size) {
+    public ResponseEntity<PageResponse<FindOrderResponse>> findOrderResponse(@RequestParam(name = "statusId", defaultValue = "2", required = true) Long statusId,
+                                                                             @RequestParam(name = "page", defaultValue = "0", required = true) Integer page,
+                                                                             @RequestParam(name = "size", defaultValue = "10", required = true) Integer size) {
         return new ResponseEntity<>(orderHandler.findOrdersWithLatestStatus(statusId, page, size), HttpStatus.OK);
     }
 

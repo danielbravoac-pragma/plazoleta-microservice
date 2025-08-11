@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/restaurants", produces = "application/json")
 @RequiredArgsConstructor
+@Tag(name = "Restaurant", description = "Gestión de restaurantes.")
 public class RestaurantRestController {
 
     private final IRestaurantHandler restaurantHandler;
@@ -58,8 +60,8 @@ public class RestaurantRestController {
             }
     )
     @GetMapping
-    public ResponseEntity<PageResponse<PageRestaurantResponse>> findAllRestaurants(@RequestParam(name = "page", required = true, value = "0") Integer page,
-                                                                                   @RequestParam(name = "size", required = true, value = "5") Integer size) {
+    public ResponseEntity<PageResponse<PageRestaurantResponse>> findAllRestaurants(@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
+                                                                                   @RequestParam(name = "size", required = true, defaultValue = "5") Integer size) {
         return new ResponseEntity<>(restaurantHandler.findAll(page, size), HttpStatus.OK);
     }
 }
